@@ -103,7 +103,8 @@ class Boggle(object):
         for i in range(0,4):
             for j in range(0,4):
                 unpacked_board.append(board[i][j])
-                coord = (i,j)
+                # x,y coordinates are reversed
+                coord = (j,i)
                 letter_map[board[i][j]].append(coord)
 
         unpacked_board.sort()
