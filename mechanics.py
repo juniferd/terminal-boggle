@@ -103,32 +103,32 @@ class Boggle(object):
         ## path is tuple of tuples ((x1,y1),(x2,y2),...) 
 
         is_valid = False
+        pos = Counter(path)
+
+        for p in pos:
+            if pos[p] > 1:
+            ## if same coordinate appears twice, invalidate
+                is_valid = False
+                return is_valid
 
         for i in range(0,len(path)-1):
             
             A = path[i]
             B = path[i+1]
+        
+            for a,b in zip(A,B):
+            ## for x,y coordinates in point A and B
 
-            if A != B:
-            ## if two coordinates are not identical
-                for a,b in zip(A,B):
-                ## for x,y coordinates in point A and B
-
-                    diff = a - b
-                    ## take the difference x1 - x2, y1 - y2
-                
-                    if diff > -2 and diff < 2:
-                    ## check if difference is between -1 and 1
-                        is_valid = True
-                    else:
-                    ## if any diff not valid, the whole path is not valid
-                        is_valid = False
-                        return is_valid
-
-            else:
-            ## two coordinates cannot be identical
-                is_valid = False
-                return is_valid
+                diff = a - b
+                ## take the difference x1 - x2, y1 - y2
+            
+                if diff > -2 and diff < 2:
+                ## check if difference is between -1 and 1
+                    is_valid = True
+                else:
+                ## if any diff not valid, the whole path is not valid
+                    is_valid = False
+                    return is_valid
 
         return is_valid
 
@@ -151,7 +151,7 @@ class Boggle(object):
             
             unpacked_board, letter_map, user_letters = self.make_letter_maps(board, new_word)
             
-            # then check to see if it is on the board
+            # check to see if it is on the board
             
             a = Counter(user_letters)
             b = Counter(unpacked_board)
@@ -168,12 +168,12 @@ class Boggle(object):
                 is_valid = False
                 for letter in new_word:
                     pos = letter_map[letter]
-                    ## print "position of letter %s: %s" % (letter, pos)
+                    ##print "position of letter %s: %s" % (letter, pos)
                     find_coords.append(pos)
                 
                 for path in product(*find_coords):
                     find_paths.append(path)
-                    ## print "possible path is:", path
+                    ##print "possible path is:", path
 
                 for path in find_paths:
                     # take difference between each coordinate
