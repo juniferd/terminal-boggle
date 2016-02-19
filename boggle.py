@@ -1,7 +1,6 @@
-import mechanics
 import engine
 
-a_game = mechanics.Boggle()
-a_game.play()
+a_game = engine.Engine()
+a_game.menu()
 
 

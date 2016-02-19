@@ -147,9 +147,9 @@ class Boggle(object):
             ## i'm doing this now since we've already checked to make sure
             ## the original word the user typed was in the dictionary
 
-            word = word.replace('qu','q')
+            new_word = word.replace('qu','q')
             
-            unpacked_board, letter_map, user_letters = self.make_letter_maps(board, word)
+            unpacked_board, letter_map, user_letters = self.make_letter_maps(board, new_word)
             
             # then check to see if it is on the board
             
@@ -166,7 +166,7 @@ class Boggle(object):
                 find_coords = []
                 find_paths = []
                 is_valid = False
-                for letter in word:
+                for letter in new_word:
                     pos = letter_map[letter]
                     ## print "position of letter %s: %s" % (letter, pos)
                     find_coords.append(pos)
@@ -182,7 +182,7 @@ class Boggle(object):
                     ## print "is segment valid?", is_valid
                     if is_valid == True:
                         print "good job! that's a valid word with possible path: ",path
-                        break
+                        return word
                         
                 if not is_valid:
                     print "no valid paths found!"
@@ -191,7 +191,7 @@ class Boggle(object):
                 print "hey! letter(s) %s not on the board!" % minus_list
         else:
         ## word isn't in dictionary
-            print "try again"
+            print "not in dictionary, try again"
 
     # show the board in a human-friendly way
     def show_board(self, board):
@@ -206,13 +206,4 @@ class Boggle(object):
                     print " ",
             print "\n"
 
-    # play a game of boggle
-    def play(self):
-        board = self.set_board()
-        timer = True
-        self.find_all_words(board)
-        
-        while timer is True:
-            self.show_board(board)
-            user_word = raw_input("> ")
-            self.check_word(user_word.lower(), board)
+    
