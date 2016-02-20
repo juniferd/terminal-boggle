@@ -1,13 +1,13 @@
 import threading
-from time import sleep
 
 import mechanics
 ## engine for game play
 
+GAME_TIME=15
 class Engine(object):
     def __init__(self):
         self.__timer_on = True
-        self.__remaining_time = 60
+        self.__remaining_time = GAME_TIME
         self.__round_score = 0
 
     """
@@ -39,11 +39,16 @@ class Engine(object):
         for word in game_words:
             print word
         
+        # show total words
+        all_words = self.game.find_all_words()
+        print "You found %s out of %s words" % (len(game_words), all_words)
+
         game_score = self.score_game(game_words)
         # score a game
         print "Your game score: ", game_score
-        # add score to round_score
 
+
+        # add score to round_score
         self.__round_score += game_score
         print "Your round score: ", self.__round_score
         self.game_reset()
@@ -80,7 +85,7 @@ class Engine(object):
     def game_reset(self):
         
         self.__timer_on = True
-        self.__remaining_time = 60
+        self.__remaining_time = GAME_TIME
 
     def tick_timer(self):
         self.__remaining_time -= 1
@@ -95,18 +100,19 @@ class Engine(object):
     # play a game of boggle
     def play_game(self):
         checked_words = {}
-        board = mechanics.Boggle().set_board()
-        mechanics.Boggle().find_all_words(board)
+        boggle_game = mechanics.Boggle()
+        self.game = boggle_game
+
         self.tick_timer()
         # play a timed game
 
         while self.__timer_on is True:
-            mechanics.Boggle().show_board(board)
+            boggle_game.show_board()
             user_word = raw_input("> ")
             if not self.__timer_on: 
                 break
 
-            this_word = mechanics.Boggle().check_word(user_word.lower(), board)
+            this_word = boggle_game.check_word(user_word.lower())
             if this_word is not None:
                 checked_words[this_word] = len(this_word)
 

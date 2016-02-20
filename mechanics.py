@@ -19,7 +19,10 @@ class Boggle(object):
         if len(word) > 2 and len(word) < 18:
             dict_words[word] = word
 
-    
+    def __init__(self):
+        self.board = self.set_board()
+        self.unpacked_board, self.letter_map = self.make_letter_maps(self.board) 
+
     # get the dice for instance of game
     def get_dice(self):
         game_dice = {}
@@ -66,19 +69,31 @@ class Boggle(object):
     def set_board(self):
         game_dice = self.get_dice()
         game_letters = self.get_die_letters(game_dice)
-        board = self.layout_board(game_letters)
+        self.board = self.layout_board(game_letters)
 
-        return board
+        return self.board
 
     # find all the possible words present on the current boggle board
-    def find_all_words(self, board):
+    def find_all_words(self):
+        num = 0
+        all_words = {}
+        ##TODO take out print statements from check_word
+        '''
+        for word in Boggle.dict_words:
+            checked_word = self.check_word(word)
+            if checked_word:
+                all_words[checked_word] = checked_word
+                num +=1
+
+        print "found %s words" % num
+        '''
         pass
+        
 
     # make a map for letters and coordinates on board
-    def make_letter_maps(self, board, word):
+    def make_letter_maps(self, board):
         unpacked_board = []
         letter_map = defaultdict(list)
-        user_letters = []
 
         ## unpacked_board is an array of sorted letters of current board ['a','b',...]
         ## letter_map is a dict of letters to coordinates {'a':[(x1,y1),(x2,y2)], 'b':[(x3,y3)],...}
@@ -90,13 +105,7 @@ class Boggle(object):
                 coord = (j,i)
                 letter_map[board[i][j]].append(coord)
 
-        
-        
-        ## user_letters is array of letters users entered ['a,','b',...]
-        for letter in word:
-            user_letters.append(letter)
-
-        return unpacked_board, letter_map, user_letters
+        return unpacked_board, letter_map
 
     # validate segments in a given path made up of coordinates x,y
     def validate_segment(self, path):
@@ -133,11 +142,9 @@ class Boggle(object):
         return is_valid
 
     # check user word
-    def check_word(self, word, board):
+    def check_word(self, word):
         ## TODO: BREAK THIS DOWN
-        unpacked_board = []
         user_letters = []
-        letter_map = defaultdict(list)
         
         ## first check to see if user's word is in the dictionary        
         if word in Boggle.dict_words:
@@ -149,12 +156,14 @@ class Boggle(object):
 
             new_word = word.replace('qu','q')
             
-            unpacked_board, letter_map, user_letters = self.make_letter_maps(board, new_word)
-            
+            ## user_letters is array of letters users entered ['a,','b',...]
+            for letter in new_word:
+                user_letters.append(letter)
+
             # check to see if it is on the board
             
             a = Counter(user_letters)
-            b = Counter(unpacked_board)
+            b = Counter(self.unpacked_board)
 
             minus_list = list(a - b)
             
@@ -167,7 +176,7 @@ class Boggle(object):
                 find_paths = []
                 is_valid = False
                 for letter in new_word:
-                    pos = letter_map[letter]
+                    pos = self.letter_map[letter]
                     ##print "position of letter %s: %s" % (letter, pos)
                     find_coords.append(pos)
                 
@@ -194,10 +203,10 @@ class Boggle(object):
             print "not in dictionary, try again"
 
     # show the board in a human-friendly way
-    def show_board(self, board):
+    def show_board(self):
         print "-------------"
         print "play boggle!\n"
-        for row in board:
+        for row in self.board:
             for letter in row:
                 print " ",letter.upper(),
                 if letter is "q":
