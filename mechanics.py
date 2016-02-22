@@ -149,7 +149,7 @@ class Boggle(object):
         return is_valid
 
     # check user word
-    def check_word(self, word, p=False):
+    def check_word(self, word, print_on=False):
         ## TODO: BREAK THIS DOWN
         
         ## first check to see if user's word is in the dictionary        
@@ -165,10 +165,10 @@ class Boggle(object):
             # check to see if letter is on the board
             
             for letter in new_word:
-                if letter in self.unpacked_board:
+                if letter in self.letter_map:
                     pass
                 else:
-                    if p == True:
+                    if print_on == True:
                         print "hey! letter(s) not on the board!"
                     return
             
@@ -194,17 +194,17 @@ class Boggle(object):
                 ## print list(path)
                 ## print "is segment valid?", is_valid
                 if is_valid == True:
-                    if p == True:
+                    if print_on == True:
                         print "good job! that's a valid word with possible path: ",path
                     return word
                     
             if not is_valid:
-                if p == True:
+                if print_on == True:
                     print "no valid paths found!"
                 pass
         else:
         ## word isn't in dictionary
-            if p == True:
+            if print_on == True:
                 print "not in dictionary, try again"
             pass
 
