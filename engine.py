@@ -1,6 +1,7 @@
 import threading
 
 import mechanics
+
 ## engine for game play
 
 GAME_TIME=15
@@ -21,8 +22,7 @@ class Engine(object):
     """
     # present a menu
     def menu(self):
-        print "welcome to terminal boggle"
-        print "type S to start playing (or H for help)"
+        print "\ntype S to start playing"
         player_input = raw_input("> ").lower()
         
         ## FIX THIS LATER
@@ -35,7 +35,8 @@ class Engine(object):
     def start_round(self):
         ##FIX THIS LATER
         game_words = self.play_game()
-        print "Here are your words from the game: "
+        
+        print "Here are your valid words from the game: "
         for word in game_words:
             print word
         
@@ -52,6 +53,7 @@ class Engine(object):
         self.__round_score += game_score
         print "Your round score: ", self.__round_score
         self.game_reset()
+        print "-------------"
 
         # present the menu
         self.menu()
@@ -91,7 +93,7 @@ class Engine(object):
         self.__remaining_time -= 1
         if self.__remaining_time <= 0:
             self.__timer_on = False
-            print "60 seconds are up! press enter"
+            print "%s seconds are up! press enter" % GAME_TIME
 
         if self.__timer_on:
             t = threading.Timer(1.0, self.tick_timer)

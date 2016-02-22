@@ -1,6 +1,7 @@
 import random
 from collections import Counter, defaultdict
 from itertools import product, permutations
+from sys import stdout
 
 class Boggle(object):
 
@@ -77,17 +78,23 @@ class Boggle(object):
     def find_all_words(self):
         num = 0
         all_words = {}
-        ##TODO take out print statements from check_word
-        '''
-        for word in Boggle.dict_words:
+
+        print "Finding all possible words on this board"
+        
+        for i,word in enumerate(Boggle.dict_words):
+            if i % 1500 == 0:
+                stdout.write('.')
+                stdout.flush()
             checked_word = self.check_word(word)
             if checked_word:
                 all_words[checked_word] = checked_word
                 num +=1
 
-        print "found %s words" % num
-        '''
-        pass
+        print "\n"
+        for word in all_words:
+            print all_words[word], " ",
+        print "\n"
+        return num
         
 
     # make a map for letters and coordinates on board
@@ -190,17 +197,19 @@ class Boggle(object):
                     ## print list(path)
                     ## print "is segment valid?", is_valid
                     if is_valid == True:
-                        print "good job! that's a valid word with possible path: ",path
+                        #print "good job! that's a valid word with possible path: ",path
                         return word
                         
                 if not is_valid:
-                    print "no valid paths found!"
-
+                    #print "no valid paths found!"
+                    pass
             else:
-                print "hey! letter(s) %s not on the board!" % minus_list
+                #print "hey! letter(s) %s not on the board!" % minus_list
+                pass
         else:
         ## word isn't in dictionary
-            print "not in dictionary, try again"
+            #print "not in dictionary, try again"
+            pass
 
     # show the board in a human-friendly way
     def show_board(self):
