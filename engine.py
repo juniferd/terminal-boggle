@@ -114,7 +114,7 @@ class Engine(object):
             if not self.__timer_on: 
                 break
 
-            this_word = boggle_game.check_word(user_word.lower())
+            this_word = boggle_game.check_word(user_word.lower(),True)
             if this_word is not None:
                 checked_words[this_word] = len(this_word)
 

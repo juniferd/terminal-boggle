@@ -149,9 +149,8 @@ class Boggle(object):
         return is_valid
 
     # check user word
-    def check_word(self, word):
+    def check_word(self, word, p=False):
         ## TODO: BREAK THIS DOWN
-        user_letters = []
         
         ## first check to see if user's word is in the dictionary        
         if word in Boggle.dict_words:
@@ -162,53 +161,51 @@ class Boggle(object):
             ## the original word the user typed was in the dictionary
 
             new_word = word.replace('qu','q')
+
+            # check to see if letter is on the board
             
-            ## user_letters is array of letters users entered ['a,','b',...]
             for letter in new_word:
-                user_letters.append(letter)
-
-            # check to see if it is on the board
-            
-            a = Counter(user_letters)
-            b = Counter(self.unpacked_board)
-
-            minus_list = list(a - b)
-            
-            if len(minus_list) == 0:
-                # then check to see if it follows board rules
-                # x,y coordinates can be max +/- 1 away, used only once
-                
-                # first need to create all possible paths between letters
-                find_coords = []
-                find_paths = []
-                is_valid = False
-                for letter in new_word:
-                    pos = self.letter_map[letter]
-                    ##print "position of letter %s: %s" % (letter, pos)
-                    find_coords.append(pos)
-                
-                for path in product(*find_coords):
-                    find_paths.append(path)
-                    ##print "possible path is:", path
-
-                for path in find_paths:
-                    # take difference between each coordinate
-                    is_valid = self.validate_segment(path)
-                    ## print list(path)
-                    ## print "is segment valid?", is_valid
-                    if is_valid == True:
-                        #print "good job! that's a valid word with possible path: ",path
-                        return word
-                        
-                if not is_valid:
-                    #print "no valid paths found!"
+                if letter in self.unpacked_board:
                     pass
-            else:
-                #print "hey! letter(s) %s not on the board!" % minus_list
+                else:
+                    if p == True:
+                        print "hey! letter(s) not on the board!"
+                    return
+            
+            # then check to see if it follows board rules
+            # x,y coordinates can be max +/- 1 away, used only once
+            
+            # first need to create all possible paths between letters
+            find_coords = []
+            find_paths = []
+            is_valid = False
+            for letter in new_word:
+                pos = self.letter_map[letter]
+                ##print "position of letter %s: %s" % (letter, pos)
+                find_coords.append(pos)
+            
+            for path in product(*find_coords):
+                find_paths.append(path)
+                ##print "possible path is:", path
+
+            for path in find_paths:
+                # take difference between each coordinate
+                is_valid = self.validate_segment(path)
+                ## print list(path)
+                ## print "is segment valid?", is_valid
+                if is_valid == True:
+                    if p == True:
+                        print "good job! that's a valid word with possible path: ",path
+                    return word
+                    
+            if not is_valid:
+                if p == True:
+                    print "no valid paths found!"
                 pass
         else:
         ## word isn't in dictionary
-            #print "not in dictionary, try again"
+            if p == True:
+                print "not in dictionary, try again"
             pass
 
     # show the board in a human-friendly way
